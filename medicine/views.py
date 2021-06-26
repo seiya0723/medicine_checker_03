@@ -16,6 +16,8 @@ from .models import Medicine
 class IndexView(View):
 
     def get(self, request, *args, **kwargs):
+        medicines   = Medicine.objects.filter(effect="",caution="",dosage="",side_effect="")
+        print(len(list(medicines.values())))
 
         return render(request,"medicine/index.html")
 
@@ -79,8 +81,6 @@ class SearchView(View):
 
         context = { "medicines":medicines }
 
-
-        
         #検索結果のレンダリングを文字列型にして返す。
         content = render_to_string("medicine/search.html",context,request)
 
@@ -101,7 +101,7 @@ class SingleView(View):
         print("single")
         json    = { "error":True }
 
-        #pkから医薬品情報一件を抜き取る、JSONで返すのでリスト型に書き換え。
+        #pkから医薬品情報一件を抜き取る、JSONで返すので辞書型に書き換え。
         medicine    = Medicine.objects.filter(id=pk).first()
 
         #医薬品情報が無い場合はエラーを返す。
